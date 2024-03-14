@@ -46,8 +46,8 @@ export const useCustomNavigation = () => {
     navigate("/contact");
   };
 
-  const navatt = () => {
-    navigate("/attendance");
+  const navchat = () => {
+    navigate("/chat");
   };
 
   return {
@@ -60,6 +60,6 @@ export const useCustomNavigation = () => {
     navabout,
     navteach,
     navcon,
-    navatt,
+    navchat,
   };
 };

@@ -21,47 +21,6 @@ const workingDirectory = path.join(__dirname, "../server-inator/Main/");
 app.use(cors());
 app.use(express.json());
 
-app.post("/api/attendance", async (req, res) => {
-  try {
-    const courseId = req.body.courseid;
-
-    // 1. Fetch studentsList field from db where the course id matches
-    const courseRecord = await courseSchema.findOne({
-      courseid: parseInt(req.body.courseid),
-    });
-    const firstStudentsList = courseRecord.studentsList;
-    var studentsList = await takeMembers(firstStudentsList);
-    console.log(studentsList);
-    studentsList.push(2424);
-    // 2. Find students matching with the ids and update their attendance field
-    const students = await User.find({ schoolid: { $in: studentsList } });
-    console.log("Number of students:", students.length);
-    const updatedStudents = await Promise.all(
-      students.map(async (student) => {
-        console.log(student.name);
-        console.log("entered");
-        const attendance = student.attendance || {}; // If attendance field doesn't exist, initialize it as an empty object
-        if (!attendance[courseId]) {
-          attendance[courseId] = []; // If no attendance recorded for this course, initialize it as an empty array
-        }
-        // Add today's date to attendance for this course
-        attendance[courseId].push(new Date().toISOString().slice(0, 10)); // Assuming date format YYYY-MM-DD
-        // Update the student's attendance
-        await User.findByIdAndUpdate(
-          student._id,
-          { attendance },
-          { new: true }
-        );
-      })
-    );
-
-    res.status(200).json({ message: "Attendance updated successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Attendance error" });
-  }
-});
-
 async function refreshData() {
   try {
     await User.deleteMany({});

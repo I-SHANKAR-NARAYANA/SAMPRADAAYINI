@@ -225,10 +225,10 @@ function App() {
       </div>
 
       <section className="courses">
-        <h1 className="heading">our courses</h1>
+        <h1 className="heading">Search Temples & Cultural Sites</h1>
         <section className="form-container">
           <form onSubmit={loginUser} encType="multipart/form-data">
-            <h3>MANUALLY SUBMIT LOCATION</h3>
+            <h3>SUBMIT YOUR LOCATION</h3>
             <br></br>
             <p>
               LATITUDE<span>*</span>

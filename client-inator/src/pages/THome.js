@@ -38,6 +38,7 @@ function App() {
   const parsedDet = JSON.parse(allDet) || [];
   const userid = parsedDet.userid;
 
+  const [showTable, setShowTable] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [error, setError] = useState("");
@@ -90,24 +91,12 @@ function App() {
         setError(`Error retrieving location: ${error.message}`);
       }
     );
-
-    return (
-      <div>
-        {error ? (
-          <p>{error}</p>
-        ) : (
-          <p>
-            Latitude: {latitude}, Longitude: {longitude}
-          </p>
-        )}
-        <p>hello</p>
-      </div>
-    );
   }
 
-  async function loginUser(event) {
+  async function submitCoords(event) {
     event.preventDefault();
     fetchSites(latitude, longitude);
+    setShowTable(true);
   }
 
   async function fetchSites(latitude, longitude) {
@@ -227,8 +216,14 @@ function App() {
       <section className="courses">
         <h1 className="heading">Search Temples & Cultural Sites</h1>
         <section className="form-container">
-          <form onSubmit={loginUser} encType="multipart/form-data">
-            <h3>SUBMIT YOUR LOCATION</h3>
+          <form onSubmit={submitCoords} encType="multipart/form-data">
+            <div className="flex-btn">
+              <a onClick={LocationFetcher} className="option-btn">
+                FETCH COORDINATES AUTOMATICALLY
+              </a>
+            </div>
+            <br></br>
+            <h3>SUBMIT YOUR LOCATION MANUALLY</h3>
             <br></br>
             <p>
               LATITUDE<span>*</span>
@@ -260,14 +255,8 @@ function App() {
             <input type="submit" value="SUBMIT" name="submit" className="btn" />
           </form>
         </section>
-        <div className="more-btn">
-          <a onClick={LocationFetcher} className="inline-option-btn">
-            view all courses
-          </a>
-        </div>
       </section>
-      {LocationFetcher()}
-      <Table data={data} />
+      {showTable && <Table data={data} />}
     </div>
   );
 }

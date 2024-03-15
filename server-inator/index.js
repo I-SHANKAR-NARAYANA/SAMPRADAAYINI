@@ -15,8 +15,7 @@ const bcrypt = require("bcryptjs");
 const { spawn } = require("child_process");
 const path = require("path");
 
-// Set the working directory explicitly
-const workingDirectory = path.join(__dirname, "../server-inator/Main/");
+const workingDirectory = path.join(__dirname, "../server-inator/");
 
 app.use(cors());
 app.use(express.json());
@@ -255,9 +254,42 @@ app.get("/api/sites/:coord", async (req, res) => {
   try {
     const coord = req.params.coord;
     const part = coord.split(",");
+    console.log(coord);
+    console.log(part);
     const latitude = part[0];
     const longitude = part[1];
-    return res.json({ 48: "44" });
+    process.chdir(workingDirectory);
+    const pythonScript = path.join(
+      __dirname,
+      "../server-inator/siteSearcher.py"
+    );
+
+    const processp = spawn("python", [pythonScript, latitude, longitude]);
+
+    let hell;
+
+    processp.stdout.on("data", (data) => {
+      test = data.toString();
+    });
+
+    processp.stderr.on("data", (data) => {
+      console.log("err results: %j", data.toString("utf8"));
+    });
+
+    processp.on("error", (err) => {
+      console.error("Failed to start subprocess.", err);
+    });
+
+    await new Promise((resolve, reject) => {
+      processp.stdout.on("end", () => {
+        hell = JSON.parse(test);
+        console.log(hell);
+        resolve();
+      });
+    });
+
+    console.log(hell);
+    return res.json(hell);
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
   }

@@ -111,7 +111,7 @@ function App() {
   }
 
   async function fetchSites(latitude, longitude) {
-    const url = "http://localhost:1337/api/sites/" + latitude + "" + longitude;
+    const url = "http://localhost:1337/api/sites/" + latitude + "," + longitude;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -120,7 +120,9 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        alert("coming" + data);
+        alert(
+          "coming" + data["argument_received_1"] + data["argument_received_2"]
+        );
         console.log(data);
       })
       .catch((error) => {
@@ -227,6 +229,7 @@ function App() {
         <section className="form-container">
           <form onSubmit={loginUser} encType="multipart/form-data">
             <h3>MANUALLY SUBMIT LOCATION</h3>
+            <br></br>
             <p>
               LATITUDE<span>*</span>
             </p>

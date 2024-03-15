@@ -338,17 +338,13 @@ app.post("/api/add_course", async (req, res) => {
   }
 });
 
-app.get("/api/courses/:userid", async (req, res) => {
+app.get("/api/sites/:coord", async (req, res) => {
   try {
-    const userid = req.params.userid;
-    const user = await User.findOne({ userid: userid });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const courseList = user.courseList;
-
-    return res.json({ courseList });
+    const coord = req.params.coord;
+    const part = coord.split(",");
+    const latitude = part[0];
+    const longitude = part[1];
+    return res.json({ 48: "44" });
   } catch (error) {
     return res.status(500).json({ error: "Internal server error" });
   }

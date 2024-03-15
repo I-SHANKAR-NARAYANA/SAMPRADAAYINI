@@ -48,9 +48,9 @@ function App() {
   const parsedDet = JSON.parse(allDet) || [];
   const userid = parsedDet.userid;
 
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [error, setError] = useState(null);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const [error, setError] = useState("");
 
   const arr = [pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9];
   const picp = arr[parsedDet.picn];
@@ -82,12 +82,6 @@ function App() {
   useEffect(() => {
     addScript();
   }, []);
-
-  const [allCourses, setAllCourses] = useState([]);
-
-  function clicked() {
-    navigate("/addCourse");
-  }
 
   function LocationFetcher() {
     // Check if geolocation is supported by the browser
@@ -121,8 +115,13 @@ function App() {
     );
   }
 
-  async function fetchCourses() {
-    const url = "http://localhost:1337/api/courses/" + userid;
+  async function loginUser(event) {
+    event.preventDefault();
+    fetchSites(latitude, longitude);
+  }
+
+  async function fetchSites(latitude, longitude) {
+    const url = "http://localhost:1337/api/sites/" + latitude + "" + longitude;
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -131,10 +130,11 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setAllCourses(data.courseList);
+        alert("coming" + data);
+        console.log(data);
       })
       .catch((error) => {
-        console.error("Error fetching courses:", error);
+        console.error("Error fetching sites:", error);
       });
   }
 
@@ -241,35 +241,30 @@ function App() {
               LATITUDE<span>*</span>
             </p>
             <input
-              value={email}
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              placeholder="Email"
+              value={latitude}
+              name="latitude"
+              onChange={(e) => setLatitude(e.target.value)}
+              type="number"
+              placeholder="Enter Latitude"
               required
-              maxLength="50"
+              maxLength="20"
               className="box"
             />
             <p>
               LONGITUDE<span>*</span>
             </p>
             <input
-              name="pass"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              placeholder="Password"
+              name="longitude"
+              value={longitude}
+              onChange={(e) => setLongitude(e.target.value)}
+              type="number"
+              placeholder="Enter Longitude"
               required
               maxLength="20"
               className="box"
             />
 
-            <input type="submit" value="LOGIN" name="submit" className="btn" />
-            <br></br>
-            <p>NO ACCOUNT?</p>
-            <a onClick={navreg} className="option-btn">
-              REGISTER
-            </a>
+            <input type="submit" value="SUBMIT" name="submit" className="btn" />
           </form>
         </section>
         <div className="more-btn">

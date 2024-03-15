@@ -11,17 +11,10 @@ import pic6 from "./images/pic-6.jpg";
 import pic7 from "./images/pic-7.jpg";
 import pic8 from "./images/pic-8.jpg";
 import pic9 from "./images/pic-9.jpg";
-import thumb1 from "./images/thumb-1.png";
-import thumb2 from "./images/thumb-2.png";
-import thumb3 from "./images/thumb-3.png";
-import thumb4 from "./images/thumb-4.png";
-import thumb5 from "./images/thumb-5.png";
-import thumb6 from "./images/thumb-6.png";
-import thumb7 from "./images/thumb-7.png";
-import thumb8 from "./images/thumb-8.png";
-import thumb9 from "./images/thumb-9.png";
-import defaul from "./images/defaul.png";
 import { useCustomNavigation } from "./functions";
+
+const { spawn } = require("child_process");
+const path = require("path");
 
 function App() {
   const {
@@ -36,6 +29,49 @@ function App() {
     navcon,
     navchat,
   } = useCustomNavigation();
+
+  const data = {
+    0: ["col1", "col2", "col3"],
+    1: ["col1", "col2", "col3"],
+    2: ["col1", "col2", "col3"],
+    3: ["col1", "col2", "col3"],
+  };
+
+  const workingDirectory = path.join(__dirname, "../client-inator/src/pages/");
+
+  async function siteSearcher(latitude, longitude) {
+    process.chdir(workingDirectory);
+    const pythonScript = path.join(
+      __dirname,
+      "../client-inator/src/pages/siteSearcher.py"
+    );
+    const processp = spawn("python", [pythonScript, latitude, longitude]);
+
+    let hell;
+
+    processp.stdout.on("data", (data) => {
+      test = data.toString();
+    });
+
+    processp.stderr.on("data", (data) => {
+      console.log("err results: %j", data.toString("utf8"));
+    });
+
+    processp.on("error", (err) => {
+      console.error("Failed to start subprocess.", err);
+    });
+
+    await new Promise((resolve, reject) => {
+      processp.stdout.on("end", () => {
+        hell = JSON.parse(test);
+        console.log(hell);
+        resolve();
+      });
+    });
+
+    console.log(hell);
+    return hell;
+  }
 
   const allDet = sessionStorage.getItem("dett");
   const parsedDet = JSON.parse(allDet) || [];
@@ -82,7 +118,7 @@ function App() {
     navigate("/addCourse");
   }
 
-  function LocationFetcher() {
+  async function LocationFetcher() {
     // Check if geolocation is supported by the browser
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
@@ -99,7 +135,7 @@ function App() {
         setError(`Error retrieving location: ${error.message}`);
       }
     );
-
+    res = await siteSearcher(latitude, longitude);
     return (
       <div>
         {error ? (
@@ -109,7 +145,7 @@ function App() {
             Latitude: {latitude}, Longitude: {longitude}
           </p>
         )}
-        <p>hello</p>
+        <p>{res}</p>
       </div>
     );
   }
@@ -141,69 +177,28 @@ function App() {
     navigate("/playlist");
   };
 
-  const fetchCourseDetails = (courseDetails) => {
-    let imgsrc = defaul;
-    let num = 0;
-    if (courseDetails.title.toLowerCase().includes("html")) {
-      imgsrc = thumb1;
-      num = 1;
-    } else if (courseDetails.title.toLowerCase().includes("css")) {
-      imgsrc = thumb2;
-      num = 2;
-    } else if (
-      courseDetails.title.toLowerCase().includes("javascript") ||
-      courseDetails.title.toLowerCase().includes("js")
-    ) {
-      imgsrc = thumb3;
-      num = 3;
-    } else if (courseDetails.title.toLowerCase().includes("boostrap")) {
-      imgsrc = thumb4;
-      num = 4;
-    } else if (courseDetails.title.toLowerCase().includes("jquery")) {
-      imgsrc = thumb5;
-      num = 5;
-    } else if (courseDetails.title.toLowerCase().includes("sass")) {
-      imgsrc = thumb6;
-      num = 6;
-    } else if (courseDetails.title.toLowerCase().includes("php")) {
-      imgsrc = thumb7;
-      num = 7;
-    } else if (courseDetails.title.toLowerCase().includes("mysql")) {
-      imgsrc = thumb8;
-      num = 8;
-    } else if (courseDetails.title.toLowerCase().includes("react")) {
-      imgsrc = thumb9;
-      num = 9;
-    }
-    const courseid = courseDetails.courseid;
-
+  function Table({ data }) {
     return (
-      <div className="box" key={courseDetails.title}>
-        <div className="tutor">
-          <img src={picp} alt="" />
-          <div className="info">
-            <span>{courseDetails.description}</span>
-          </div>
-        </div>
-        <div className="thumb">
-          <img src={imgsrc} alt="" />
-          <span>10 videos</span>
-        </div>
-        <h3 className="title">{courseDetails.title}</h3>
-        <button
-          onClick={clickedv}
-          id={String(courseid) + "," + String(num)}
-          className="inline-btn"
-        >
-          view course
-        </button>
-      </div>
+      <table className="highlight-table">
+        <thead>
+          <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.keys(data).map((key) => (
+            <tr key={key} className="table-row">
+              {data[key].map((item, index) => (
+                <td key={index}>{item}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     );
-  };
-
-  useEffect(() => {
-    fetchCourses();
-  }, []);
+  }
 
   return (
     <div>
@@ -218,9 +213,9 @@ function App() {
       />
       <header className="header">
         <section className="flex">
-          <button className="inline-btn" onClick={clicked}>
+          {/* <button className="inline-btn" onClick={clicked}>
             ADD COURSES
-          </button>
+          </button> */}
           <h1 className="logname">YOU ARE IN EDUPULSE</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
@@ -268,17 +263,44 @@ function App() {
 
       <section className="courses">
         <h1 className="heading">our courses</h1>
+        <section className="form-container">
+          <form onSubmit={loginUser} encType="multipart/form-data">
+            <h3>MANUALLY SUBMIT LOCATION</h3>
+            <p>
+              LATITUDE<span>*</span>
+            </p>
+            <input
+              value={email}
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              type="email"
+              placeholder="Email"
+              required
+              maxLength="50"
+              className="box"
+            />
+            <p>
+              LONGITUDE<span>*</span>
+            </p>
+            <input
+              name="pass"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              placeholder="Password"
+              required
+              maxLength="20"
+              className="box"
+            />
 
-        <div className="box-container">
-          {allCourses === undefined ? (
-            <p>Loading...</p>
-          ) : allCourses.length === 0 ? (
-            <p>No courses at the moment...</p>
-          ) : (
-            allCourses.map(fetchCourseDetails)
-          )}
-        </div>
-
+            <input type="submit" value="LOGIN" name="submit" className="btn" />
+            <br></br>
+            <p>NO ACCOUNT?</p>
+            <a onClick={navreg} className="option-btn">
+              REGISTER
+            </a>
+          </form>
+        </section>
         <div className="more-btn">
           <a onClick={LocationFetcher} className="inline-option-btn">
             view all courses
@@ -286,6 +308,7 @@ function App() {
         </div>
       </section>
       {LocationFetcher()}
+      <Table data={data} />
     </div>
   );
 }

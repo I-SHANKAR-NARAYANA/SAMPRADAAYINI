@@ -11,10 +11,17 @@ import pic6 from "./images/pic-6.jpg";
 import pic7 from "./images/pic-7.jpg";
 import pic8 from "./images/pic-8.jpg";
 import pic9 from "./images/pic-9.jpg";
+import thumb1 from "./images/thumb-1.png";
+import thumb2 from "./images/thumb-2.png";
+import thumb3 from "./images/thumb-3.png";
+import thumb4 from "./images/thumb-4.png";
+import thumb5 from "./images/thumb-5.png";
+import thumb6 from "./images/thumb-6.png";
+import thumb7 from "./images/thumb-7.png";
+import thumb8 from "./images/thumb-8.png";
+import thumb9 from "./images/thumb-9.png";
+import defaul from "./images/defaul.png";
 import { useCustomNavigation } from "./functions";
-
-const { spawn } = require("child_process");
-const path = require("path");
 
 function App() {
   const {
@@ -36,42 +43,6 @@ function App() {
     2: ["col1", "col2", "col3"],
     3: ["col1", "col2", "col3"],
   };
-
-  const workingDirectory = path.join(__dirname, "../client-inator/src/pages/");
-
-  async function siteSearcher(latitude, longitude) {
-    process.chdir(workingDirectory);
-    const pythonScript = path.join(
-      __dirname,
-      "../client-inator/src/pages/siteSearcher.py"
-    );
-    const processp = spawn("python", [pythonScript, latitude, longitude]);
-
-    let hell;
-
-    processp.stdout.on("data", (data) => {
-      test = data.toString();
-    });
-
-    processp.stderr.on("data", (data) => {
-      console.log("err results: %j", data.toString("utf8"));
-    });
-
-    processp.on("error", (err) => {
-      console.error("Failed to start subprocess.", err);
-    });
-
-    await new Promise((resolve, reject) => {
-      processp.stdout.on("end", () => {
-        hell = JSON.parse(test);
-        console.log(hell);
-        resolve();
-      });
-    });
-
-    console.log(hell);
-    return hell;
-  }
 
   const allDet = sessionStorage.getItem("dett");
   const parsedDet = JSON.parse(allDet) || [];
@@ -118,7 +89,7 @@ function App() {
     navigate("/addCourse");
   }
 
-  async function LocationFetcher() {
+  function LocationFetcher() {
     // Check if geolocation is supported by the browser
     if (!navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
@@ -135,7 +106,7 @@ function App() {
         setError(`Error retrieving location: ${error.message}`);
       }
     );
-    res = await siteSearcher(latitude, longitude);
+
     return (
       <div>
         {error ? (
@@ -145,7 +116,7 @@ function App() {
             Latitude: {latitude}, Longitude: {longitude}
           </p>
         )}
-        <p>{res}</p>
+        <p>hello</p>
       </div>
     );
   }

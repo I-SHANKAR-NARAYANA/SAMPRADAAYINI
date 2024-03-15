@@ -11,16 +11,6 @@ import pic6 from "./images/pic-6.jpg";
 import pic7 from "./images/pic-7.jpg";
 import pic8 from "./images/pic-8.jpg";
 import pic9 from "./images/pic-9.jpg";
-import thumb1 from "./images/thumb-1.png";
-import thumb2 from "./images/thumb-2.png";
-import thumb3 from "./images/thumb-3.png";
-import thumb4 from "./images/thumb-4.png";
-import thumb5 from "./images/thumb-5.png";
-import thumb6 from "./images/thumb-6.png";
-import thumb7 from "./images/thumb-7.png";
-import thumb8 from "./images/thumb-8.png";
-import thumb9 from "./images/thumb-9.png";
-import defaul from "./images/defaul.png";
 import { useCustomNavigation } from "./functions";
 
 function App() {

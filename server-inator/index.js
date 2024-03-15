@@ -18,52 +18,6 @@ const path = require("path");
 // Set the working directory explicitly
 const workingDirectory = path.join(__dirname, "../server-inator/Main/");
 
-async function takeMembers(studentArr) {
-  process.chdir(workingDirectory);
-
-  // Absolute paths to the Python script and files
-  const pythonScript = path.join(
-    __dirname,
-    "../server-inator/Main/face_recognition.py"
-  );
-  const haarCascade = path.join(
-    __dirname,
-    "../server-inator/Main/haar_face.xml"
-  );
-  const featuresFile = path.join(
-    __dirname,
-    "../server-inator/Main/features.npy"
-  );
-  const labelsFile = path.join(__dirname, "../server-inator/Main/labels.npy");
-
-  const processp = spawn("python", [pythonScript, ["Uploaded", studentArr]]);
-
-  let hell;
-
-  processp.stdout.on("data", (data) => {
-    test = data.toString();
-  });
-
-  processp.stderr.on("data", (data) => {
-    console.log("err results: %j", data.toString("utf8"));
-  });
-
-  processp.on("error", (err) => {
-    console.error("Failed to start subprocess.", err);
-  });
-
-  await new Promise((resolve, reject) => {
-    processp.stdout.on("end", () => {
-      hell = JSON.parse(test).map(Number);
-      console.log(hell);
-      resolve(); // Resolve the promise when processing ends
-    });
-  });
-
-  console.log(hell);
-  return hell;
-}
-
 app.use(cors());
 app.use(express.json());
 

@@ -1526,3 +1526,28 @@ input[type="radio"] {
    height: 100vh;
    /* Adjust height as needed */
 }
+
+.centered-datepicker {
+   text-align: center;
+}
+
+.highlight-table {
+   width: 100%;
+   border-collapse: collapse;
+}
+
+.highlight-table th,
+.highlight-table td {
+   border: 1px solid #dddddd;
+   padding: 8px;
+}
+
+.highlight-table th {
+   background-color: #f2f2f2;
+   text-align: left;
+}
+
+.table-row:hover {
+   background-color: #d11111;
+   cursor: pointer;
+}

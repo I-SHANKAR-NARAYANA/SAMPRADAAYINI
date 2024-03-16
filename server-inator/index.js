@@ -287,7 +287,6 @@ app.get("/api/sites/:coord", async (req, res) => {
         resolve();
       });
     });
-
     console.log(hell);
     return res.json(hell);
   } catch (error) {

@@ -89,32 +89,31 @@ function App() {
 
   async function submitCoords(event) {
     event.preventDefault();
-    fetchSites(latitude, longitude);
-    setTableData({
-      0: ["col1", "col2", "col3"],
-      1: ["col1", "col2", "col3"],
-      2: ["col1", "col2", "col3"],
-      3: ["col1", "col2", "col3"],
-    });
+    const result = await fetchSites(latitude, longitude);
+    console.log("result");
+    console.log(result);
+    setTableData(result);
+    console.log("tableData");
+    console.log(tableData);
     setShowTable(true);
   }
 
   async function fetchSites(latitude, longitude) {
     const url = "http://localhost:1337/api/sites/" + latitude + "," + longitude;
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((datag) => {
-        console.log(datag);
-        return datag;
-      })
-      .catch((error) => {
-        console.error("Error fetching sites:", error);
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      const data = await response.json();
+      console.log("data fetched:", data);
+      return data; // Return the fetched data
+    } catch (error) {
+      console.error("Error fetching sites:", error);
+      throw error; // Throw the error so it can be caught by the caller
+    }
   }
 
   const clickedv = (e) => {

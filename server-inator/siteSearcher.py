@@ -11,9 +11,10 @@ def main():
     arg_from_node_2 = sys.argv[2]
 
     data_to_node = {
-        "message": "Hello from Python!",
-        "argument_received_1": arg_from_node,
-        "argument_received_2": arg_from_node_2
+        0: ["col1", "col2", "col3"],
+        1: ["col1", "col2", "col3"],
+        2: ["col1", "col2", "col3"],
+        3: ["col1", "col2", "col3"],
     }
 
     print(json.dumps(data_to_node))

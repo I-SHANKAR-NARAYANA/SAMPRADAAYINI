@@ -20,19 +20,18 @@ function App() {
   } = useCustomNavigation();
   const navigate = useNavigate();
 
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState("teacher");
   const [otp, setOtp] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [schoolid, setSchoolId] = useState("");
 
   useEffect(() => {
     addScript();
   }, []);
 
   const handleRoleChange = (event) => {
-    setSelectedRole(event.target.value);
+    setSelectedRole("teacher");
   };
 
   function hello() {
@@ -61,7 +60,6 @@ function App() {
         email,
         password,
         userid,
-        schoolid,
         selectedRole,
       }),
     });
@@ -206,41 +204,7 @@ function App() {
               maxLength="20"
               className="box"
             />
-            <p>
-              SCHOOL ID<span>*</span>
-            </p>
-            <input
-              type="number"
-              name="schoolid"
-              value={schoolid}
-              onChange={(e) => setSchoolId(e.target.value)}
-              placeholder="Enter the teacher_id/student_id provided by your school"
-              required
-              maxLength="20"
-              className="box"
-            />
-            <p>
-              IMAGES<span>*</span>
-            </p>
-            <br></br>
-            <input
-              type="file"
-              name="images"
-              multiple
-              style={{
-                width: "100%",
-                padding: "8px",
-                borderRadius: "40px",
-                border: "1px solid #ccc",
-                boxSizing: "border-box",
-                marginBottom: "10px",
-                display: "inline-block",
-              }}
-            />
-            <p>
-              SELECT YOUR ROLE<span>*</span>
-            </p>
-            <div className="radio-group">
+            <div className="radio-group" style={{ display: "none" }}>
               <label>
                 <input
                   type="radio"

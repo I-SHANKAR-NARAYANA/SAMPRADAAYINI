@@ -58,9 +58,7 @@ app.post("/api/register", async (req, res) => {
       email: req.body.email,
       password: hashedPassword,
       userid: req.body.userid,
-      schoolid: req.body.schoolid,
       selectedRole: req.body.selectedRole,
-      courseList: [],
       picn: getRandomNumber(),
     });
 

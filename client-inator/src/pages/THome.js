@@ -27,13 +27,6 @@ function App() {
     navchat,
   } = useCustomNavigation();
 
-  const data = {
-    0: ["col1", "col2", "col3"],
-    1: ["col1", "col2", "col3"],
-    2: ["col1", "col2", "col3"],
-    3: ["col1", "col2", "col3"],
-  };
-
   const allDet = sessionStorage.getItem("dett");
   const parsedDet = JSON.parse(allDet) || [];
   const userid = parsedDet.userid;
@@ -41,6 +34,7 @@ function App() {
   const [showTable, setShowTable] = useState(false);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [tableData, setTableData] = useState(null);
   const [error, setError] = useState("");
 
   const arr = [pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9];
@@ -96,6 +90,12 @@ function App() {
   async function submitCoords(event) {
     event.preventDefault();
     fetchSites(latitude, longitude);
+    setTableData({
+      0: ["col1", "col2", "col3"],
+      1: ["col1", "col2", "col3"],
+      2: ["col1", "col2", "col3"],
+      3: ["col1", "col2", "col3"],
+    });
     setShowTable(true);
   }
 
@@ -108,11 +108,9 @@ function App() {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        alert(
-          "coming" + data["argument_received_1"] + data["argument_received_2"]
-        );
-        console.log(data);
+      .then((datag) => {
+        console.log(datag);
+        return datag;
       })
       .catch((error) => {
         console.error("Error fetching sites:", error);
@@ -256,7 +254,7 @@ function App() {
           </form>
         </section>
       </section>
-      {showTable && <Table data={data} />}
+      {showTable && tableData && <Table data={tableData} />}
     </div>
   );
 }

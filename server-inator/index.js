@@ -32,7 +32,7 @@ async function refreshData() {
 }
 allCourses = new Object();
 mongoose
-  .connect(process.env.LOCAL_MONGO_URL, {
+  .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -42,7 +42,7 @@ mongoose
   .catch((err) => {
     console.error("Error connecting to MongoDB:", err.message);
   });
-// refreshData();
+refreshData();
 
 app.post("/api/register", async (req, res) => {
   const { name, email, password, userid, schoolid, selectedRole } = req.body;

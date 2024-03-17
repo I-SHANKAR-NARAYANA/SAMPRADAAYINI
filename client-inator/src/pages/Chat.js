@@ -79,6 +79,7 @@ function App() {
       setInputText("");
     }
   };
+
   function Chat() {
     return (
       <div className="messages-container">

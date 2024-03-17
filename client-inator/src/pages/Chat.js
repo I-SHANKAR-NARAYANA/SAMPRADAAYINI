@@ -64,19 +64,40 @@ function App() {
     addScript();
   }, []);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (inputText.trim() !== "") {
       const userMessage = { sender: "user", text: inputText };
-      const botResponse = { sender: "bot", text: "Thank you" };
 
-      // Combine user message and bot response into one array
-      const updatedMessages = [...messages, userMessage, botResponse];
+      // Send the user message to the server
+      try {
+        const response = await fetch("http://localhost:1337/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: inputText }),
+        });
 
-      // Update state with the new array of messages
-      setMessages(updatedMessages);
+        if (!response.ok) {
+          throw new Error("Failed to send message to server");
+        }
 
-      // Clear input text after sending message
-      setInputText("");
+        // Assuming the server responds with bot's response
+        const botResponseText = await response.text();
+        console.log(botResponseText);
+        const botResponse = { sender: "bot", text: botResponseText };
+
+        // Combine user message and bot response into one array
+        const updatedMessages = [...messages, userMessage, botResponse];
+
+        // Update state with the new array of messages
+        setMessages(updatedMessages);
+
+        // Clear input text after sending message
+        setInputText("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
     }
   };
 

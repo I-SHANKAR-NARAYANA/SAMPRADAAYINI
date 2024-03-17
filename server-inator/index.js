@@ -42,7 +42,45 @@ mongoose
   .catch((err) => {
     console.error("Error connecting to MongoDB:", err.message);
   });
-refreshData();
+//refreshData();
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const { message } = req.body;
+    let botResponse = "Thank you for your message! This is a bot response.";
+    process.chdir(workingDirectory);
+    const pythonScript = path.join(__dirname, "../server-inator/chat.py");
+
+    const processp = spawn("python", [pythonScript, message]);
+
+    let hell;
+
+    processp.stdout.on("data", (data) => {
+      test = data.toString();
+    });
+
+    processp.stderr.on("data", (data) => {
+      console.log("err results: %j", data.toString("utf8"));
+    });
+
+    processp.on("error", (err) => {
+      console.error("Failed to start subprocess.", err);
+    });
+
+    await new Promise((resolve, reject) => {
+      processp.stdout.on("end", () => {
+        hell = JSON.parse(test);
+        resolve();
+      });
+    });
+    console.log("output");
+    console.log(hell);
+    botResponse = hell;
+    res.send(botResponse);
+  } catch (error) {
+    return res.status(500).json({ error: "chat error" });
+  }
+});
 
 app.post("/api/register", async (req, res) => {
   const { name, email, password, userid, schoolid, selectedRole } = req.body;

@@ -1743,3 +1743,11 @@ thead td {
    color: #fff;
    /* text color */
 }
+
+.loading {
+   position: absolute;
+   bottom: 10px;
+   /* Adjust this value according to your design */
+   left: 50%;
+   transform: translateX(-50%);
+}

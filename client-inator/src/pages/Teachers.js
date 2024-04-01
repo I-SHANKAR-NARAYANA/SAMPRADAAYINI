@@ -75,7 +75,7 @@ function App() {
       ></link>
       <div className="header">
         <section className="flex">
-          <h1 className="logname">EDUPULSE</h1>
+          <h1 className="logname">PILGRIM'S PATH</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
             <div id="user-btn" className="fas fa-user"></div>

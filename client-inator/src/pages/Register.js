@@ -115,7 +115,7 @@ function App() {
       />
       <header className="header">
         <section className="flex">
-          <h1 className="logname">WELCOME TO EDUPULSE</h1>
+          <h1 className="logname">welcome to Pilgrimage's Path</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
             <div id="user-btn" className="fas fa-user"></div>

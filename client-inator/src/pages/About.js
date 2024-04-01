@@ -76,7 +76,7 @@ function App() {
       />
       <div className="header">
         <section className="flex">
-          <h1 className="logname">EDUPULSE</h1>
+          <h1 className="logname">PILGRIM'S PATH</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
             <div id="user-btn" className="fas fa-user"></div>
@@ -136,56 +136,22 @@ function App() {
               and we promise to exceed your expectations every time you visit
               our website.
             </p>
-            <a onClick={navcour} className="inline-btn">
-              our courses
+            <a onClick={navcon} className="inline-btn">
+              Contact us
             </a>
-          </div>
-        </div>
-
-        <div className="box-container">
-          <div className="box">
-            <i className="fas fa-graduation-cap"></i>
-            <div>
-              <h3>+10k</h3>
-              <p>online courses</p>
-            </div>
-          </div>
-
-          <div className="box">
-            <i className="fas fa-user-graduate"></i>
-            <div>
-              <h3>+40k</h3>
-              <p>brilliant students</p>
-            </div>
-          </div>
-
-          <div className="box">
-            <i className="fas fa-chalkboard-user"></i>
-            <div>
-              <h3>+2k</h3>
-              <p>expert tutors</p>
-            </div>
-          </div>
-
-          <div className="box">
-            <i className="fas fa-briefcase"></i>
-            <div>
-              <h3>100%</h3>
-              <p>job placement</p>
-            </div>
           </div>
         </div>
       </section>
 
       <section className="reviews">
-        <h1 className="heading">student's reviews</h1>
+        <h1 className="heading">user's reviews</h1>
 
         <div className="box-container">
           <div className="box">
             <p>
-              I stumbled upon this website while searching for online courses,
+              I stumbled upon this website while searching for cultural sites,
               and I'm thrilled with what I found. The navigation is super
-              smooth, and I easily signed up as a student. The content is
+              smooth, and I easily signed up as a user. The content is
               top-notch, and the responsive design makes it just as enjoyable on
               my phone.
             </p>
@@ -248,7 +214,7 @@ function App() {
 
           <div className="box">
             <p>
-              I've been exploring various websites for learning resources, but
+              I've been exploring various websites for cultural resources, but
               this one stands out. The fast loading speed ensures I can quickly
               access the content I need. The range of topics covered is
               impressive, and I appreciate the customer support. It was a
@@ -270,7 +236,7 @@ function App() {
 
           <div className="box">
             <p>
-              This website has made my life as a student so much easier. The
+              This website has made my travel journey so much easier. The
               seamless navigation and rich content make studying a pleasure. I
               especially like that I can switch between my laptop and phone
               without any hiccups. The quick response from the support team is

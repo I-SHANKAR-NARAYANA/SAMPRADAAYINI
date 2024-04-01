@@ -32,7 +32,7 @@ function App() {
 
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState([]);
-  const [checker, setChecker] = useState([false]);
+  const [loading, setLoading] = useState(false);
 
   const arr = [pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9];
   const picp = arr[parsedDet.picn];
@@ -65,27 +65,22 @@ function App() {
     addScript();
     const place = sessionStorage.getItem("place");
     if (place) {
-      setInputText(`give history of ${place}`);
+      const placeParts = place.split(",");
+      const firstPartOfPlace = placeParts[0];
+
+      setInputText(`give history of ${firstPartOfPlace}`);
       sessionStorage.removeItem("place");
-      setChecker(true);
       sendMessage();
     }
   }, []);
 
   const sendMessage = async () => {
-    console.log("sendMessage function called");
-    console.log(
-      inputText.trim(),
-      "ff",
-      inputText.trim() != "",
-      "jfjf",
-      checker
-    );
-    if (inputText.trim() !== "" && checker == true) {
+    if (inputText.trim() !== "") {
       const userMessage = { sender: "user", text: inputText };
-      setChecker(false);
-      console.log("Trying", checker);
-      // Send the user message to the server
+      const updatedMessages = [...messages, userMessage];
+      setInputText("");
+      setMessages(updatedMessages);
+      setLoading(true);
       try {
         const response = await fetch("http://localhost:1337/api/chat", {
           method: "POST",
@@ -94,25 +89,21 @@ function App() {
           },
           body: JSON.stringify({ message: inputText }),
         });
+
         if (!response.ok) {
           throw new Error("Failed to send message to server");
         }
 
-        // Assuming the server responds with bot's response
         const botResponseText = await response.text();
         console.log(botResponseText);
         const botResponse = { sender: "bot", text: botResponseText };
-
-        // Combine user message and bot response into one array
-        const updatedMessages = [...messages, userMessage, botResponse];
-
-        // Update state with the new array of messages
+        updatedMessages.push(botResponse);
         setMessages(updatedMessages);
-
-        // Clear input text after sending message
-        setInputText("");
+        setLoading(false);
       } catch (error) {
         console.error("Error sending message:", error);
+        setMessages([...messages]);
+        setLoading(false);
       }
     }
   };
@@ -127,9 +118,10 @@ function App() {
               message.sender === "user" ? "right" : "left"
             }`}
           >
-            {message.text}
+            {message.text.replace(/\*\*/g, "").replace(/\*/g, "")}
           </div>
         ))}
+        {loading && <p className="loading">Loading...</p>}{" "}
       </div>
     );
   }
@@ -139,7 +131,7 @@ function App() {
       <meta charSet="UTF-8" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>thome</title>
+      <title>chat</title>
 
       <link
         rel="stylesheet"
@@ -147,10 +139,7 @@ function App() {
       />
       <header className="header">
         <section className="flex">
-          {/* <button className="inline-btn" onClick={clicked}>
-            ADD COURSES
-          </button> */}
-          <h1 className="logname">YOU ARE IN EDUPULSE</h1>
+          <h1 className="logname">YOU ARE IN PILGRIM'S PATH</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
             <div id="user-btn" className="fas fa-user"></div>
@@ -175,13 +164,9 @@ function App() {
         </div>
 
         <nav className="navbar">
-          <a onClick={hell}>
+          <a onClick={navhome}>
             <i className="fas fa-home"></i>
             <span>home</span>
-          </a>
-          <a onClick={navchat}>
-            <i className="fas fa-comment"></i>
-            <span>Explore</span>
           </a>
           <a onClick={navabout}>
             <i className="fas fa-question"></i>
@@ -199,7 +184,7 @@ function App() {
         <div className="input-container">
           <input
             type="text"
-            placeholder="Type a message..."
+            placeholder={loading ? "Loading..." : "Type a message..."}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
           />

@@ -33,7 +33,7 @@ function App() {
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
       />
       <div className="intro">
-        <h1>WELCOME TO EDUPULSE</h1>
+        <h1>welcome to Pilgrimage's Path</h1>
         <p>EDUCATIONAL WEBSITE</p>
         <div className="navbtns">
           <button onClick={click1}>Register</button>

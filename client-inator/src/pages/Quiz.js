@@ -61,6 +61,40 @@ function App() {
     addScript();
   }, []);
 
+  const sendMessage = async () => {
+    if (inputText.trim() !== "") {
+      const userMessage = { sender: "user", text: inputText };
+      const updatedMessages = [...messages, userMessage];
+      setInputText("");
+      setMessages(updatedMessages);
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:1337/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ message: inputText }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to send message to server");
+        }
+
+        const botResponseText = await response.text();
+        console.log(botResponseText);
+        const botResponse = { sender: "bot", text: botResponseText };
+        updatedMessages.push(botResponse);
+        setMessages(updatedMessages);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error sending message:", error);
+        setMessages([...messages]);
+        setLoading(false);
+      }
+    }
+  };
+
   return (
     <div>
       <meta charSet="UTF-8" />
@@ -74,7 +108,7 @@ function App() {
       />
       <header className="header">
         <section className="flex">
-          <h1 className="logname">YOU ARE IN EDUPULSE</h1>
+          <h1 className="logname">YOU ARE IN PILGRIM'S PATH</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
             <div id="user-btn" className="fas fa-user"></div>

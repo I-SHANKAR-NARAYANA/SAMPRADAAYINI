@@ -105,6 +105,8 @@ function App() {
     setShowTable(true);
   }
 
+  async function putToStorage(event) {}
+
   async function fetchSites(latitude, longitude) {
     const url = "http://localhost:1337/api/sites/" + latitude + "," + longitude;
     try {
@@ -116,38 +118,37 @@ function App() {
       });
       const data = await response.json();
       console.log("data fetched:", data);
-      return data; // Return the fetched data
+      return data;
     } catch (error) {
       console.error("Error fetching sites:", error);
-      throw error; // Throw the error so it can be caught by the caller
+      throw error;
     }
   }
-
-  const clickedv = (e) => {
-    const courseidstr = e.target.id;
-    const part = courseidstr.split(",");
-    const courseid = part[0];
-    const num = part[1];
-    sessionStorage.setItem("playlistcourseid", courseid);
-    sessionStorage.setItem("num", num);
-    navigate("/playlist");
-  };
 
   function Table({ data }) {
     return (
       <table className="highlight-table" ref={tableRef}>
         <thead>
           <tr>
-            <th>Number</th> {/* Added new column */}
+            <th>Number</th>
             <th>Places</th>
             <th>Distance</th>
-            {/* <th>Column 3</th> */}
           </tr>
         </thead>
 
         <tbody>
           {Object.keys(data).map((key, rowIndex) => (
-            <tr key={key} className="table-row">
+            <tr
+              key={key}
+              className="table-row"
+              id={data[key]}
+              onClick={(event) => {
+                const elementId = event.currentTarget.id;
+                sessionStorage.setItem("place", elementId);
+                console.log("here elemdent id", event.target.id, elementId);
+                navigate("/chat");
+              }}
+            >
               <td>{rowIndex + 1}</td>
 
               {data[key].map((item, index) => (

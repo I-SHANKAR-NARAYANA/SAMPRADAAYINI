@@ -32,6 +32,7 @@ function App() {
 
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState([]);
+  const [checker, setChecker] = useState([false]);
 
   const arr = [pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9];
   const picp = arr[parsedDet.picn];
@@ -62,12 +63,28 @@ function App() {
 
   useEffect(() => {
     addScript();
+    const place = sessionStorage.getItem("place");
+    if (place) {
+      setInputText(`give history of ${place}`);
+      sessionStorage.removeItem("place");
+      setChecker(true);
+      sendMessage();
+    }
   }, []);
 
   const sendMessage = async () => {
-    if (inputText.trim() !== "") {
+    console.log("sendMessage function called");
+    console.log(
+      inputText.trim(),
+      "ff",
+      inputText.trim() != "",
+      "jfjf",
+      checker
+    );
+    if (inputText.trim() !== "" && checker == true) {
       const userMessage = { sender: "user", text: inputText };
-
+      setChecker(false);
+      console.log("Trying", checker);
       // Send the user message to the server
       try {
         const response = await fetch("http://localhost:1337/api/chat", {
@@ -77,7 +94,6 @@ function App() {
           },
           body: JSON.stringify({ message: inputText }),
         });
-
         if (!response.ok) {
           throw new Error("Failed to send message to server");
         }

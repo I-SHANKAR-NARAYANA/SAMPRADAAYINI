@@ -60,7 +60,7 @@ def locate_cultural_and_heritage_sites(latitude, longitude, radius=50000):
                     site_latitude = site['location']['latitude']
                     site_longitude = site['location']['longitude']
                     distance = calculateDistance(
-                        latitude, longitude, site_latitude, site_longitude)*10
+                        latitude, longitude, site_latitude, site_longitude)
                     sites_dict[i] = [site_name, f"{distance:.2f} km"]
                 else:
                     sites_dict[i] = [site_name, "N/A"]

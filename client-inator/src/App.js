@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Allhome from "./pages/allhome";
 import Chat from "./pages/Chat";
+import Quiz from "./pages/Chat";
 import PrivateRoute from "./PrivateRoute";
 
 const App = () => {
@@ -41,6 +42,12 @@ const App = () => {
             path="/chat"
             element={
               <PrivateRoute element={<Chat />} allowedRoles={"teacher"} />
+            }
+          />
+          <Route
+            path="/quiz"
+            element={
+              <PrivateRoute element={<Quiz />} allowedRoles={"teacher"} />
             }
           />
           <Route path="/about" element={<About />} />

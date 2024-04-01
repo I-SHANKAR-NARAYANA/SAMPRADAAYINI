@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import addScript from "./addScript";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../css/style.css";
 import pic1 from "./images/pic-1.jpg";
 import pic2 from "./images/pic-2.jpg";
@@ -36,6 +36,7 @@ function App() {
   const [longitude, setLongitude] = useState(0);
   const [tableData, setTableData] = useState(null);
   const [error, setError] = useState("");
+  const tableRef = useRef(null);
 
   const arr = [pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9];
   const picp = arr[parsedDet.picn];
@@ -67,6 +68,12 @@ function App() {
   useEffect(() => {
     addScript();
   }, []);
+
+  useEffect(() => {
+    if (showTable && tableRef.current) {
+      tableRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [showTable]);
 
   function LocationFetcher() {
     // Check if geolocation is supported by the browser
@@ -128,17 +135,21 @@ function App() {
 
   function Table({ data }) {
     return (
-      <table className="highlight-table">
+      <table className="highlight-table" ref={tableRef}>
         <thead>
           <tr>
-            <th>Column 1</th>
-            <th>Column 2</th>
+            <th>Number</th> {/* Added new column */}
+            <th>Places</th>
+            <th>Distance</th>
             {/* <th>Column 3</th> */}
           </tr>
         </thead>
+
         <tbody>
-          {Object.keys(data).map((key) => (
+          {Object.keys(data).map((key, rowIndex) => (
             <tr key={key} className="table-row">
+              <td>{rowIndex + 1}</td>
+
               {data[key].map((item, index) => (
                 <td key={index}>{item}</td>
               ))}

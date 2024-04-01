@@ -30,9 +30,6 @@ function App() {
   const allDet = sessionStorage.getItem("dett");
   const parsedDet = JSON.parse(allDet) || [];
 
-  const [inputText, setInputText] = useState("");
-  const [messages, setMessages] = useState([]);
-
   const arr = [pic1, pic2, pic3, pic4, pic5, pic6, pic7, pic8, pic9];
   const picp = arr[parsedDet.picn];
   const navigate = useNavigate();
@@ -64,66 +61,12 @@ function App() {
     addScript();
   }, []);
 
-  const sendMessage = async () => {
-    if (inputText.trim() !== "") {
-      const userMessage = { sender: "user", text: inputText };
-
-      // Send the user message to the server
-      try {
-        const response = await fetch("http://localhost:1337/api/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ message: inputText }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to send message to server");
-        }
-
-        // Assuming the server responds with bot's response
-        const botResponseText = await response.text();
-        console.log(botResponseText);
-        const botResponse = { sender: "bot", text: botResponseText };
-
-        // Combine user message and bot response into one array
-        const updatedMessages = [...messages, userMessage, botResponse];
-
-        // Update state with the new array of messages
-        setMessages(updatedMessages);
-
-        // Clear input text after sending message
-        setInputText("");
-      } catch (error) {
-        console.error("Error sending message:", error);
-      }
-    }
-  };
-
-  function Chat() {
-    return (
-      <div className="messages-container">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={`message ${
-              message.sender === "user" ? "right" : "left"
-            }`}
-          >
-            {message.text}
-          </div>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <div>
       <meta charSet="UTF-8" />
       <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>thome</title>
+      <title>quiz</title>
 
       <link
         rel="stylesheet"
@@ -131,9 +74,6 @@ function App() {
       />
       <header className="header">
         <section className="flex">
-          {/* <button className="inline-btn" onClick={clicked}>
-            ADD COURSES
-          </button> */}
           <h1 className="logname">YOU ARE IN EDUPULSE</h1>
           <div className="icons">
             <div id="menu-btn" className="fas fa-bars"></div>
@@ -177,18 +117,6 @@ function App() {
             <span>contact us</span>
           </a>
         </nav>
-      </div>
-      <div className="chat-container">
-        <Chat />
-        <div className="input-container">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-          />
-          <button onClick={sendMessage}>Send</button>
-        </div>
       </div>
     </div>
   );

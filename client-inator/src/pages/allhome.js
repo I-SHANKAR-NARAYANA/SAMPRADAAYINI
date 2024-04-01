@@ -34,7 +34,6 @@ function App() {
       />
       <div className="intro">
         <h1>welcome to Pilgrimage's Path</h1>
-        <p>EDUCATIONAL WEBSITE</p>
         <div className="navbtns">
           <button onClick={click1}>Register</button>
           <button onClick={click2}>Login</button>
